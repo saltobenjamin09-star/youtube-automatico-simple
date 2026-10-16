@@ -1,0 +1,6 @@
+client_secret*.json
+token*.json
+.env*
+salida/
+__pycache__/
+.venv/
