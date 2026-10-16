@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import random
 from pathlib import Path
 import subprocess
 import tempfile
@@ -11,14 +12,45 @@ from datetime import datetime, timedelta, timezone
 BASE = Path(__file__).resolve().parent
 TOKEN = BASE / 'token.json'
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
-ESCENAS = [
-    ('Automatización de videos', 'LOS PANCHOS TITANICOS\nPython + GitHub Actions + YouTube'),
-    ('1. Crear el video', 'Python dibuja las diapositivas y FFmpeg las convierte en un archivo MP4.'),
-    ('2. Guardar el proyecto', 'GitHub conserva el script y sus dependencias para repetir el proceso.'),
-    ('3. Ejecutar automáticamente', 'GitHub Actions instala las dependencias y ejecuta este mismo script.'),
-    ('4. Subir a YouTube', 'OAuth autoriza la subida al canal. Las credenciales se guardan como secretos.'),
-    ('5. Publicar', 'El video queda programado para las 21:00 de Argentina.'),
-]
+TEMAS = BASE / 'tematicas.json'
+HISTORIAL = BASE / 'historial.json'
+
+
+def elegir_tema():
+    temas = json.loads(TEMAS.read_text(encoding='utf-8'))
+    usados = json.loads(HISTORIAL.read_text(encoding='utf-8'))
+    if not isinstance(temas, list) or not isinstance(usados, list):
+        raise ValueError('Temáticas e historial deben ser listas JSON.')
+    ids = set()
+    for tema in temas:
+        if not isinstance(tema, dict) or not isinstance(tema.get('id'), str) or not tema['id']:
+            raise ValueError('Cada temática necesita un id de texto.')
+        if tema['id'] in ids:
+            raise ValueError('Hay ids de temática duplicados.')
+        ids.add(tema['id'])
+        for key, limit in [('titulo', 60), ('descripcion', 4500)]:
+            if not isinstance(tema.get(key), str) or not 0 < len(tema[key]) <= limit:
+                raise ValueError(f'{key} inválido en {tema["id"]}.')
+        escenas = tema.get('escenas')
+        if not isinstance(escenas, list) or not escenas:
+            raise ValueError('Cada temática necesita escenas.')
+        for escena in escenas:
+            if (not isinstance(escena, list) or len(escena) != 2
+                    or any(not isinstance(x, str) or not x.strip() for x in escena)
+                    or len(escena[0]) > 38 or len(escena[1]) > 230):
+                raise ValueError('Cada escena debe tener título (máx. 38) y texto (máx. 230).')
+    disponibles = [t for t in temas if t['id'] not in usados]
+    return random.choice(disponibles) if disponibles else None
+
+
+def reservar(tema):
+    usados = json.loads(HISTORIAL.read_text(encoding='utf-8'))
+    if tema['id'] not in usados:
+        usados.append(tema['id'])
+    temporal = HISTORIAL.with_suffix('.tmp')
+    temporal.write_text(json.dumps(usados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    temporal.replace(HISTORIAL)
+
 
 
 def autorizar():
@@ -53,7 +85,8 @@ def credenciales():
     return credentials
 
 
-def generar(segundos):
+def generar(segundos, tema):
+    ESCENAS = tema['escenas']
     from PIL import Image, ImageDraw, ImageFont
     from imageio_ffmpeg import get_ffmpeg_exe
     salida = BASE / 'salida' / 'video.mp4'
@@ -81,7 +114,7 @@ def generar(segundos):
     return salida
 
 
-def subir(archivo, credentials):
+def subir(archivo, credentials, tema):
     from googleapiclient.discovery import build
     from googleapiclient.http import MediaFileUpload
     argentina = timezone(timedelta(hours=-3))
@@ -90,8 +123,8 @@ def subir(archivo, credentials):
     if fecha <= now + timedelta(minutes=15):
         fecha += timedelta(days=1)
     body = {
-        'snippet': {'title': f'Automatización de videos | {fecha:%Y-%m-%d}',
-                    'description': 'Demostración de Python, GitHub Actions y YouTube. LOS PANCHOS TITANICOS.',
+        'snippet': {'title': f'{tema["titulo"]} | {fecha:%Y-%m-%d}',
+                    'description': tema['descripcion'],
                     'categoryId': '27'},
         'status': {'privacyStatus': 'private', 'publishAt': fecha.astimezone(timezone.utc).isoformat()}
     }
@@ -109,17 +142,31 @@ def main():
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument('--autorizar', action='store_true')
     actions.add_argument('--subir', action='store_true')
+    actions.add_argument('--subir-existente', action='store_true')
     parser.add_argument('--segundos', type=int, default=330, help='Duración; por defecto 330 (5:30).')
     args = parser.parse_args()
     if args.autorizar:
         autorizar()
         return
-    if args.segundos < len(ESCENAS):
-        parser.error('La duración mínima es de 6 segundos.')
+    if args.subir_existente:
+        tema = json.loads((BASE / 'salida' / 'tema.json').read_text(encoding='utf-8'))
+        subir(BASE / 'salida' / 'video.mp4', credenciales(), tema)
+        return
+    tema = elegir_tema()
+    if tema is None:
+        print('No quedan temáticas sin usar. Agregá nuevas en tematicas.json.')
+        return
+    if args.segundos < len(tema['escenas']):
+        parser.error('La duración debe ser al menos igual al número de escenas.')
     credentials = credenciales() if args.subir else None
-    archivo = generar(args.segundos)
+    print(f'Temática elegida: {tema["titulo"]}')
+    archivo = generar(args.segundos, tema)
+    (BASE / 'salida' / 'tema.json').write_text(
+        json.dumps(tema, ensure_ascii=False, indent=2), encoding='utf-8')
+    reservar(tema)
     if args.subir:
-        subir(archivo, credentials)
+        subir(archivo, credentials, tema)
+
 
 
 if __name__ == '__main__':

@@ -1,0 +1,188 @@
+[
+  {
+    "id": "sistema-solar",
+    "titulo": "Un viaje por el sistema solar",
+    "descripcion": "Un viaje por el sistema solar. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "Un viaje por el sistema solar",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "El Sol es una estrella y concentra la mayor parte de la masa del sistema solar."
+      ],
+      [
+        "Dato 2",
+        "Mercurio, Venus, Tierra y Marte son planetas rocosos."
+      ],
+      [
+        "Dato 3",
+        "Júpiter y Saturno son gigantes gaseosos; Urano y Neptuno son gigantes helados."
+      ],
+      [
+        "Dato 4",
+        "Los asteroides y cometas también orbitan el Sol."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  },
+  {
+    "id": "oceano",
+    "titulo": "La vida en los océanos",
+    "descripcion": "La vida en los océanos. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "La vida en los océanos",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "Los océanos cubren cerca del 71 por ciento de la superficie terrestre."
+      ],
+      [
+        "Dato 2",
+        "El fitoplancton usa la luz solar para realizar fotosíntesis."
+      ],
+      [
+        "Dato 3",
+        "Los arrecifes de coral dan refugio a numerosas especies."
+      ],
+      [
+        "Dato 4",
+        "Reducir los residuos ayuda a cuidar los ecosistemas marinos."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  },
+  {
+    "id": "programacion",
+    "titulo": "Primeros pasos en programación",
+    "descripcion": "Primeros pasos en programación. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "Primeros pasos en programación",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "Un programa es una secuencia de instrucciones para resolver una tarea."
+      ],
+      [
+        "Dato 2",
+        "Las variables permiten guardar datos como textos y números."
+      ],
+      [
+        "Dato 3",
+        "Las condiciones eligen qué instrucciones ejecutar."
+      ],
+      [
+        "Dato 4",
+        "Los bucles repiten acciones y las funciones organizan el código."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  },
+  {
+    "id": "reciclaje",
+    "titulo": "Separar y reducir residuos",
+    "descripcion": "Separar y reducir residuos. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "Separar y reducir residuos",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "Reducir el consumo evita generar residuos desde el principio."
+      ],
+      [
+        "Dato 2",
+        "Reutilizar un objeto prolonga su vida útil."
+      ],
+      [
+        "Dato 3",
+        "Separar materiales facilita su recuperación."
+      ],
+      [
+        "Dato 4",
+        "Consultá las reglas de reciclaje de tu localidad: no todos los materiales se reciben igual."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  },
+  {
+    "id": "fotografia",
+    "titulo": "Conceptos básicos de fotografía",
+    "descripcion": "Conceptos básicos de fotografía. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "Conceptos básicos de fotografía",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "La luz y el encuadre son fundamentales para una fotografía."
+      ],
+      [
+        "Dato 2",
+        "La apertura influye en la luz que entra y en la profundidad de campo."
+      ],
+      [
+        "Dato 3",
+        "La velocidad de obturación determina cuánto tiempo se captura luz."
+      ],
+      [
+        "Dato 4",
+        "Probá distintos puntos de vista y compará los resultados."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  },
+  {
+    "id": "plantas",
+    "titulo": "Cómo crecen las plantas",
+    "descripcion": "Cómo crecen las plantas. Video educativo de LOS PANCHOS TITANICOS.",
+    "escenas": [
+      [
+        "Cómo crecen las plantas",
+        "LOS PANCHOS TITANICOS"
+      ],
+      [
+        "Dato 1",
+        "Las raíces absorben agua y nutrientes del suelo."
+      ],
+      [
+        "Dato 2",
+        "Las hojas capturan luz para la fotosíntesis."
+      ],
+      [
+        "Dato 3",
+        "El tallo sostiene la planta y transporta sustancias."
+      ],
+      [
+        "Dato 4",
+        "Cada especie necesita condiciones particulares de luz, agua y temperatura."
+      ],
+      [
+        "Para recordar",
+        "Seguí explorando este tema y compartí lo que aprendiste."
+      ]
+    ]
+  }
+]
