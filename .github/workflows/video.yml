@@ -1,0 +1,46 @@
+name: Generar y subir video
+on:
+  schedule:
+    - cron: '17 23 * * *' # 20:17 Argentina; publicación prevista a las 21:00
+  workflow_dispatch:
+    inputs:
+      subir:
+        description: Subir y programar en YouTube
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: youtube
+  cancel-in-progress: false
+jobs:
+  video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Generar y opcionalmente subir
+        env:
+          SUBIR: ${{ github.event_name == 'schedule' || inputs.subir }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        shell: bash
+        run: |
+          if [ "$SUBIR" = "true" ]; then
+            python video.py --subir
+          else
+            python video.py
+          fi
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: video
+          path: salida/video.mp4
+          if-no-files-found: ignore
+          retention-days: 3
